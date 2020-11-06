@@ -70,6 +70,14 @@ namespace AccountLibrary.API.Controllers
             return NotFound();
 
         }
-    }
+
+        [Route("health")]
+        [HttpGet]
+        public ActionResult health()
+        {
+            return Ok();
+        }
 
     }
+
+}
