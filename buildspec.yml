@@ -7,7 +7,7 @@ phases:
       - echo Logging in to Amazon ECR...
       - aws --version
       - $(aws ecr get-login --no-include-email --region us-east-2 )
-      - REPOSITORY_URI= 934139732129.dkr.ecr.us-east-2.amazonaws.com/mae-mini_account
+      - REPOSITORY_URI=934139732129.dkr.ecr.us-east-2.amazonaws.com/mae-mini_account
       - IMG_VERSION=0.1.0
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=build-$IMG_VERSION
