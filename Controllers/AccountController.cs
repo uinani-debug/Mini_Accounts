@@ -21,7 +21,7 @@ namespace AccountLibrary.API.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        
+
         private readonly IMapper _mapper;
         private readonly ILogger _logger;
         private IConfiguration _configuration;
@@ -43,7 +43,14 @@ namespace AccountLibrary.API.Controllers
         public async Task<ActionResult> GetAccounts()
         {
             string token = string.Empty;
+            string traceId = string.Empty;
+            string serviceName = "MiniAccount";
             _logger.LogInformation("Method start account");
+            if (Request.Headers.ContainsKey("x-api-interactionId"))
+            {
+                traceId = Request.Headers["x-api-interactionId"];
+                _logger.LogInformation("Request Received : Service Name- " + serviceName + "Trace-Id - " + traceId);
+            }
             if (Request.Headers.ContainsKey("Authorization"))
             {
                 token = Request.Headers["Authorization"];
@@ -63,12 +70,14 @@ namespace AccountLibrary.API.Controllers
                 var responseBodyAsText = await accountsResponse.Content.ReadAsStringAsync();
                 _logger.LogInformation("string response " + responseBodyAsText);
 
+                _logger.LogInformation("Response: Service Name- " + serviceName + "Trace-Id " + traceId + "Status Code -" + accountsResponse.StatusCode.ToString());
+
                 if (accountsResponse.StatusCode == System.Net.HttpStatusCode.OK)
                     return Ok(JsonConvert.DeserializeObject(responseBodyAsText));
 
             }
+            _logger.LogInformation("Response: Service Name- " + serviceName + "Trace-Id " + traceId + "Status Code -" + System.Net.HttpStatusCode.NotFound.ToString());
             return NotFound();
-
         }
 
         [Route("health")]
